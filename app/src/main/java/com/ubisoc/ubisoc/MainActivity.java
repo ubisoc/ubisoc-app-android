@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements UbisocInterface {
     ViewPager mainPager;
 
     @BindView(R.id.mainTabs)
-    PagerTabStrip mainTabs;
+    TabLayout mainTabs;
 
     static PagerAdapter adapter;
 
@@ -105,20 +106,11 @@ public class MainActivity extends AppCompatActivity implements UbisocInterface {
 
         //Set up the UI
         adapter = new MainPagerAdapter(getSupportFragmentManager());
-
-        mainTabs.setTabIndicatorColor(Color.WHITE);
-        mainTabs.setTextColor(Color.WHITE);
-
-        mainTabs.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPrimary)));
         mainPager.setAdapter(adapter);
 
-        android.support.v7.app.ActionBar ab = this.getSupportActionBar();
-
+        //Set up tabs then go to "today" tab
+        mainTabs.setupWithViewPager(mainPager);
         mainPager.setCurrentItem(1);
-        if (Build.VERSION.SDK_INT >= 21) {
-            mainTabs.setElevation(ab.getElevation());
-            ab.setElevation(0);
-        }
 
         //Load the data on a background thread
         Thread t = new Thread(new Runnable() {

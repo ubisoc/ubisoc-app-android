@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">ubisoc</string>
     <string name="jummuahInfo">Main Jumu\'ah Khutbah starts at 1.00pm and takes place in <font color='#a73737'><u>St Francis Hall, Chaplaincy Birmingham B15 2TT</u></font></string>
+    <string name="prayer_times">Prayer Times</string>
+    <string name="today">Today</string>
+    <string name="events">Events</string>
 </resources>
