@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -18,6 +19,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.ubisoc.ubisoc.fragments.EventsFragment;
 import com.ubisoc.ubisoc.fragments.PrayerTimesFragment;
@@ -142,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements UbisocInterface {
     public void schedulePrayerNotification(String prayerName, long unixTime, String humanTime) {
         //We want to alert 5 mins before prayer
         unixTime -= 5 * 60 * 1000;
-        if(unixTime < System.currentTimeMillis()) {
+        if (unixTime < System.currentTimeMillis()) {
             return;
         }
 
@@ -159,9 +161,12 @@ public class MainActivity extends AppCompatActivity implements UbisocInterface {
 
     public void loadData() {
         String result = APIUtil.getPrayerTimesForMonth();
+        setup(result);
+    }
 
+    public void setup(String jsonString) {
         try {
-            JSONObject json = new JSONObject(result);
+            JSONObject json = new JSONObject(jsonString);
 
             //Loop the days in the month, create a Day object for each one. Add to array of days
             JSONArray monthData = json.getJSONArray("data");
@@ -186,6 +191,9 @@ public class MainActivity extends AppCompatActivity implements UbisocInterface {
 
                 }
             }
+            //Save the json for cache
+            SharedPreferences pref = getSharedPreferences(Keys.PREF, 0);
+            pref.edit().putString(Keys.PRAYER_TIME_JSON, jsonString).apply();
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -201,7 +209,6 @@ public class MainActivity extends AppCompatActivity implements UbisocInterface {
                 }
             }
         });
-
     }
 
     @Override
@@ -225,11 +232,12 @@ public class MainActivity extends AppCompatActivity implements UbisocInterface {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                AlertDialog.Builder b = new AlertDialog.Builder(MainActivity.this);
-                b.setTitle("Error");
-                b.setMessage("Could not retrieve prayer times, please check your internet connection");
-                b.setPositiveButton("Cancel", null);
-                b.show();
+                Toast.makeText(getBaseContext(), "Could not retrieve latest prayer times. Using last known data", Toast.LENGTH_SHORT).show();
+                //then use the cache
+                SharedPreferences pref = getSharedPreferences(Keys.PREF, 0);
+                String json = pref.getString(Keys.PRAYER_TIME_JSON, null);
+                if (json != null)
+                    setup(json);
             }
         });
     }
