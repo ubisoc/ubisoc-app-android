@@ -1,7 +1,9 @@
 package com.ubisoc.ubisoc.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import com.ubisoc.ubisoc.Day;
 import com.ubisoc.ubisoc.R;
 import com.ubisoc.ubisoc.util.Util;
 
+import java.net.URI;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -106,6 +109,9 @@ public class TodayFragment extends UbisocFragment {
     @BindView(R.id.todayList)
     ListView todayList;
 
+    @BindView(R.id.jummuahLabel)
+    TextView jummuahInfo;
+
     TodayTimesAdapter adapter;
 
     Day today;
@@ -118,6 +124,14 @@ public class TodayFragment extends UbisocFragment {
 
         adapter = new TodayTimesAdapter();
         todayList.setAdapter(adapter);
+
+        jummuahInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.co.uk/maps/place/St+Francis+Hall+Multi+Faith+Chaplaincy+University+Of+Birmingham/@52.449248,-1.926898,19.1z/data=!4m5!3m4!1s0x4870bc34fcb216d5:0x9e3702aa2cd3de29!8m2!3d52.4492535!4d-1.9264288?hl=en"));
+                startActivity(i);
+            }
+        });
 
         return root;
     }

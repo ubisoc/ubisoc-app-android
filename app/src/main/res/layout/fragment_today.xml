@@ -8,7 +8,7 @@
         android:id="@+id/currentDayLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:gravity="center_horizontal"
         android:textSize="20sp" />
 
@@ -19,8 +19,19 @@
         android:layout_below="@+id/currentDayLabel"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="32dp">
+        android:layout_marginTop="24dp">
 
     </ListView>
+
+
+    <TextView
+        android:id="@+id/jummuahLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_below="@+id/todayList"
+        android:gravity="center_horizontal"
+        android:text="@string/jummuahInfo"
+        android:textSize="16sp" />
 
 </RelativeLayout>
